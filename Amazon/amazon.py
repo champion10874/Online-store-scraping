@@ -9,6 +9,7 @@ import os
 driver = webdriver.Chrome()
 driver.maximize_window()
 
+# Import data from file
 inputs = openpyxl.load_workbook('entrada.xlsx')
 sheet = inputs.active
 site_name = sheet.cell(row = 2, column = 1).value
@@ -20,6 +21,7 @@ print("E-mail: ", email)
 print("Senha: ", password)
 print("Número total de produtos: ", num_of_products)
 
+# Setting directory
 if not os.path.exists('captura de tela'):
   os.makedirs('captura de tela')
 
@@ -44,11 +46,13 @@ func.find_element(driver, By.ID, "continue").click()
 func.find_element(driver, By.ID, "ap_password").send_keys(password)
 func.find_element(driver, By.ID, "signInSubmit").click()
 
+# For Captcha
 while True:
   response = input("Did you pass the character? (y/n): ")
   if response == 'y':
     break
 
+# Start for each item
 match_num = 0
 for i in range(num_of_products):
   sleep(0.3)
@@ -125,7 +129,8 @@ for i in range(num_of_products):
       driver.find_element(By.ID, 'dp').screenshot('captura de tela/{}'.format(image_name))
     except:
       image_name = "Não encontrado"
-  
+
+    # Save result
     workbook = openpyxl.load_workbook('resultado.xlsx')
     sheet = workbook['Sheet']
     sheet[f'A{match_num + 1}'] = site_name
